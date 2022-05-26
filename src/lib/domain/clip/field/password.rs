@@ -29,6 +29,13 @@ impl Password {
     pub fn has_password(&self) -> bool {
         self.0.is_some()
     }
+
+    pub fn to_str(&self) -> &str {
+        match self.0 {
+            Some(ref password) => password,
+            None => ""
+        }
+    }
 }
 
 /// The Default implementation is no password.
@@ -37,6 +44,7 @@ impl Default for Password {
         Self(None)
     }
 }
+
 
 impl FromStr for Password {
     type Err = ClipError;
