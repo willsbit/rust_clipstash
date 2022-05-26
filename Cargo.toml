@@ -10,3 +10,10 @@ name = "clipstash"
 path = "src/lib/mod.rs"
 
 [dependencies]
+serde = {version = "1.0", features = ["derive"]}
+serde_json = "1"
+thiserror = "1"
+chrono = {version = "0.4", features = ["serde"]}
+uuid = {version = "0.8", features = ["serde", "v4"]}
+derive_more = "0.99"
+rand = "0.8"
