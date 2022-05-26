@@ -7,7 +7,7 @@ pub async fn get_clip(req: ask::GetClip, pool: &DatabasePool) -> Result<Clip, Se
     let user_pass = req.password.clone();
     let clip: Clip = query::get_clip(req, pool).await?.try_into()?;
     if clip.password.has_password() {
-        if clip.password.into_inner() == user_pass.into_inner() {
+        if clip.password.to_str() == user_pass.to_str() {
             Ok(clip)
         } else {
             Err(ServiceError::PermissionError("Invalid password".to_owned()))
