@@ -6,7 +6,7 @@ use sqlx::Sqlite;
 
 #[derive(Debug, thiserror::Error)]
 pub enum DataError {
-    #[error(database error: {0})]
+    #[error("database error: {0}")]
     Database(#[from] sqlx::Error),
 }
 
