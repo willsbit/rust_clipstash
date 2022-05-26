@@ -1,7 +1,6 @@
-use super::ClipError;
+use crate::domain::clip::ClipError;
 use serde::{Serialize, Deserialize};
 use std::str::FromStr;
-use crate::domain::clip::ClipError;
 use crate::domain::time::Time;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -31,7 +30,7 @@ impl FromStr for Expires {
         } else {
             match Time::from_str(raw) {
                 Ok(time) => Ok(Self::new(time)),
-                Err(err) => Err(e.into())
+                Err(e) => Err(e.into())
             }
         }
     }

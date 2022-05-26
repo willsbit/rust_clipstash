@@ -1,4 +1,4 @@
-use super::ClipError;
+use crate::domain::clip::ClipError;
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use derive_more::From;
@@ -10,7 +10,7 @@ impl ShortCode {
     pub fn new() -> Self {
         use rand::prelude::*;
         let allowed_chars = ['a', 'b', 'c', 'd', '1', '2', '3', '4'];
-        let mut rgn = thread_rng();
+        let mut rng = thread_rng();
         let mut shortcode = String::with_capacity(10);
 
         for _ in 0..10 {

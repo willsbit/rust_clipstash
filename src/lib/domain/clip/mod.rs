@@ -9,7 +9,7 @@ pub enum ClipError {
     InvalidPassword(String),
     #[error("invalid title: {0}")]
     InvalidTitle(String),
-    #[error("empty content: {0}")]
+    #[error("empty content")]
     EmptyContent,
     #[error("invalid date: {0}")]
     InvalidDate(String),

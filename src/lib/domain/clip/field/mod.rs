@@ -17,7 +17,7 @@ mod expires;
 pub use expires::Expires;
 
 mod password;
-pub use password::Passwords;
+pub use password::Password;
 
 mod hits;
 pub use hits::Hits;
