@@ -6,14 +6,14 @@ use crate::domain::clip::field;
 
 #[derive(Debug, sqlx::FromRow)]
 pub struct Clip {
-    pub clip_id: String,
-    pub shortcode: String,
-    pub content: String,
-    pub title: Option<String>,
-    pub posted: NaiveDateTime,
-    pub expires: Option<NaiveDateTime>,
-    pub password: Option<String>,
-    pub hits: i64
+    pub(in crate::data) clip_id: String,
+    pub(in crate::data) shortcode: String,
+    pub(in crate::data) content: String,
+    pub(in crate::data) title: Option<String>,
+    pub(in crate::data) posted: NaiveDateTime,
+    pub(in crate::data) expires: Option<NaiveDateTime>,
+    pub(in crate::data) password: Option<String>,
+    pub(in crate::data) hits: i64
 }
 
 impl TryFrom<Clip> for crate::domain::Clip {
@@ -39,4 +39,39 @@ impl TryFrom<Clip> for crate::domain::Clip {
 
 pub struct GetClip {
     pub(in crate::data) shortcode: String
+}
+
+impl From<ShortCode> for GetClip {
+    fn from(shortcode: ShortCode) -> Self {
+        Self {
+            shortcode: shortcode.into_inner()
+        }
+    }
+}
+
+impl From<String> for GetClip {
+    fn from(shortcode: String) -> Self {
+        Self {
+            shortcode
+        }
+    }
+}
+
+pub struct NewClip {
+    pub(in crate::data) clip_id: String,
+    pub(in crate::data) shortcode: String,
+    pub(in crate::data) content: String,
+    pub(in crate::data) title: Option<String>,
+    pub(in crate::data) posted: i64,
+    pub(in crate::data) expires: Option<NaiveDateTime>,
+    pub(in crate::data) password: Option<String>,
+}
+
+pub struct UpdateClip {
+    // can't update id and posted date
+    pub(in crate::data) shortcode: String,
+    pub(in crate::data) content: String,
+    pub(in crate::data) title: Option<String>,
+    pub(in crate::data) expires: Option<i64>,
+    pub(in crate::data) password: Option<String>,
 }
