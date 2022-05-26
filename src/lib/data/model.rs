@@ -16,7 +16,7 @@ pub struct Clip {
     pub(in crate::data) hits: i64
 }
 
-impl TryFrom<Clip> for crate::domain::Clip {
+impl TryFrom<Clip> for crate::domain::clip::Clip {
     type Error = ClipError;
 
     fn try_from(clip: Clip) -> Result<Self, Self::Error> {
@@ -24,7 +24,7 @@ impl TryFrom<Clip> for crate::domain::Clip {
         use std::str::FromStr;
         Ok(
             Self {
-                clip_id: field::ClipId::new(DbId::try_from(clip.clip_id.as_str())?),
+                clip_id: field::ClipId::new(DbId::try_from(clip.clip_id.to_owned())?),
                 shortcode: field::ShortCode::from(clip.shortcode.as_str()),
                 content: field::Content::new(clip.content.as_str())?,
                 title: field::Title::new(clip.title),
