@@ -2,6 +2,7 @@ use crate::domain::clip::ClipError;
 use serde::{Serialize, Deserialize};
 use std::str::FromStr;
 use crate::domain::time::Time;
+use rocket::form::{self, DataField, FromFormField, ValueField};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Expires(Option<Time>);
@@ -32,6 +33,18 @@ impl FromStr for Expires {
                 Ok(time) => Ok(Self::new(time)),
                 Err(e) => Err(e.into())
             }
+        }
+    }
+}
+
+#[rocket::async_trait]
+impl<'r> FromFormField<'r> for Expires {
+    fn from_value(field: ValueField<'r>) -> form::Result<'r, Self> {
+        if field.value.trim.is_empty() {
+            Ok(Self(None))
+        } else {
+            Ok(Self::from_str(field.value)
+                .map_err(|e| form::Error::validation(format!("{:?}", e)))?)
         }
     }
 }
