@@ -2,6 +2,7 @@ pub mod ctx;
 pub mod renderer;
 pub mod form;
 pub mod http;
+pub mod hitcounter;
 
 pub const PASSWORD_COOKIE: &str = "password";
 
