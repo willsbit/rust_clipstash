@@ -1,5 +1,5 @@
 pub mod ask;
-mod action;
+pub mod action;
 
 use sqlx::Error;
 use crate::{ClipError, DataError};
