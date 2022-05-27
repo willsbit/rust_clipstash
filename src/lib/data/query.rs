@@ -2,6 +2,7 @@ use super::model;
 use crate::data::{DataError, DatabasePool};
 use crate::ShortCode;
 use sqlx::Row;
+use crate::web::api::ApiKey;
 
 type Result<T> = std::result::Result<T, DataError>;
 
@@ -13,9 +14,9 @@ pub async fn increase_hit_count(
     let shortcode = shortcode.as_str();
 
     Ok(sqlx::query!(
-        "UPDATE clips\
-        SET hits = hits + ?\
-        WHERE shortcode = ?",
+        r#"UPDATE clips
+        SET hits = hits + ?
+        WHERE shortcode = ?"#,
         hits,
         shortcode
     )
@@ -88,4 +89,61 @@ pub async fn update_clip<M:Into<model::UpdateClip>>(
     ).execute(pool).await?;
 
     get_clip(model.shortcode, pool).await
+}
+
+/// Saves an [`ApiKey`].
+pub async fn save_api_key(api_key: ApiKey, pool: &DatabasePool) -> Result<ApiKey> {
+    let bytes = api_key.clone().into_inner();
+    let _ = sqlx::query!("INSERT INTO api_keys (api_key) VALUES (?)", bytes)
+        .execute(pool)
+        .await
+        .map(|_| ())?;
+    Ok(api_key)
+}
+
+/// The return value from the [`revoke_api_key`] function.
+pub enum RevocationStatus {
+    /// The [`ApiKey`] was successfully revoked.
+    Revoked,
+    /// The [`ApiKey`] was not found, so no revocation occuured.
+    NotFound
+}
+
+/// Revokes an [`ApiKey`].
+pub async fn revoke_api_key(api_key: ApiKey, pool: &DatabasePool) -> Result<RevocationStatus> {
+    let bytes = api_key.clone().into_inner();
+    Ok(
+        sqlx::query!("DELETE FROM api_keys WHERE api_key == ?", bytes)
+            .execute(pool)
+            .await
+            .map(|result| match result.rows_affected() {
+                0 => RevocationStatus::NotFound,
+                _ => RevocationStatus::Revoked
+            })?,
+    )
+}
+
+/// Determines if the [`ApiKey`] is valid.
+pub async fn api_key_is_valid(api_key: ApiKey, pool: &DatabasePool) -> Result<bool> {
+    let bytes = api_key.clone().into_inner();
+    Ok(
+        sqlx::query("SELECT COUNT(api_key) FROM api_keys WHERE api_key = ?")
+            .bind(bytes)
+            .fetch_one(pool)
+            .await
+            .map(|row| {
+                let count: u32 = row.get(0);
+                count > 0
+            })?,
+    )
+}
+
+/// Deletes all expired [`Clips`](`crate::domain::Clip`).
+pub async fn delete_expired(pool: &DatabasePool) -> Result<u64> {
+    Ok(
+        sqlx::query!(r#"DELETE FROM clips WHERE strftime('%s', 'now') > expires"#)
+            .execute(pool)
+            .await?
+            .rows_affected()
+    )
 }
