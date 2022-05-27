@@ -40,7 +40,7 @@ impl FromStr for Expires {
 #[rocket::async_trait]
 impl<'r> FromFormField<'r> for Expires {
     fn from_value(field: ValueField<'r>) -> form::Result<'r, Self> {
-        if field.value.trim.is_empty() {
+        if field.value.trim().is_empty() {
             Ok(Self(None))
         } else {
             Ok(Self::from_str(field.value)

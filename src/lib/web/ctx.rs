@@ -47,7 +47,7 @@ impl PageContext for ViewClip {
 
 #[derive(Debug, Serialize, Constructor)]
 pub struct PasswordRequired {
-    shortcode: crate::Shortcode
+    shortcode: crate::ShortCode
 }
 
 impl PageContext for PasswordRequired {

@@ -6,16 +6,16 @@ use rocket::tokio;
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
-#[structop(name = "httpd")]
+#[structopt(name = "httpd")]
 struct Opt {
-    #[structopt(default_value = sqlite:data.db)]
+    #[structopt(default_value = "sqlite:data.db")]
     connection_string: String,
     #[structopt(short, long, parse(from_os_str), default_value = "templates/")]
     template_directory: PathBuf
 }
 
 fn main() {
-    dotenv.ok();
+    dotenv().ok();
     let opt = Opt::from_args();
 
     let rt = tokio::runtime::Runtime::new()
@@ -36,5 +36,5 @@ fn main() {
             .launch()
             .await
             .expect("failed to launch rocket server")
-    })
+    });
 }
