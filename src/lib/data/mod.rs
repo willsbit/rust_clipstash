@@ -2,7 +2,7 @@ use derive_more::{Display, From};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use std::str::FromStr;
-use sqlx::Sqlite;
+use sqlx::Postgres;
 
 #[derive(Debug, thiserror::Error)]
 pub enum DataError {
@@ -10,19 +10,19 @@ pub enum DataError {
     Database(#[from] sqlx::Error),
 }
 
-pub type AppDatabase = Database<Sqlite>;
-pub type DatabasePool = sqlx::sqlite::SqlitePool;
-pub type Transaction<'t> = sqlx::Transaction<'t, Sqlite>;
-pub type AppDatabaseRow = sqlx::sqlite::SqliteRow;
-pub type AppQueryResult = sqlx::sqlite::SqliteQueryResult;
+pub type AppDatabase = Database<Postgres>;
+pub type DatabasePool = sqlx::postgres::PgPool;
+pub type Transaction<'t> = sqlx::Transaction<'t, Postgres>;
+pub type AppDatabaseRow = sqlx::postgres::PgRow;
+pub type AppQueryResult = sqlx::postgres::PgQueryResult;
 
 pub struct Database<D: sqlx::Database>(sqlx::Pool<D>);
 pub mod model;
 pub mod query;
 
-impl Database<Sqlite> {
+impl Database<Postgres> {
     pub async fn new(connection_str: &str) -> Self {
-        let pool = sqlx::sqlite::SqlitePoolOptions::new()
+        let pool = sqlx::postgres::PgPoolOptions::new()
             .connect(connection_str)
             .await;
 
