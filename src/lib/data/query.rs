@@ -15,8 +15,8 @@ pub async fn increase_hit_count(
 
     Ok(sqlx::query!(
         r#"UPDATE clips
-        SET hits = hits + ?
-        WHERE shortcode = ?"#,
+        SET hits = hits + $1
+        WHERE shortcode = $2"#,
         hits,
         shortcode
     )
@@ -34,7 +34,7 @@ pub async fn get_clip<M: Into<model::GetClip>>(
     let shortcode = model.shortcode.as_str();
     Ok(sqlx::query_as!(
         model::Clip,
-        r#"SELECT * FROM clips WHERE shortcode = ?"#,
+        r#"SELECT * FROM clips WHERE shortcode = $1"#,
         shortcode
     ).fetch_one(pool).await?)
 }
@@ -54,7 +54,7 @@ pub async fn new_clip<M: Into<model::NewClip>>(
             expires,
             password,
             hits)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)"#,
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)"#,
         model.clip_id,
         model.shortcode,
         model.content,
@@ -76,11 +76,11 @@ pub async fn update_clip<M:Into<model::UpdateClip>>(
     let model = model.into();
     let _ = sqlx::query!(
         r#"UPDATE clips SET
-            content = ?,
-            title = ?,
-            expires = ?,
-            password = ?
-        WHERE shortcode = ?"#,
+            content = $1,
+            title = $2,
+            expires = $3,
+            password = $4
+        WHERE shortcode = $5"#,
         model.content,
         model.title,
         model.expires,
@@ -94,7 +94,7 @@ pub async fn update_clip<M:Into<model::UpdateClip>>(
 /// Saves an [`ApiKey`].
 pub async fn save_api_key(api_key: ApiKey, pool: &DatabasePool) -> Result<ApiKey> {
     let bytes = api_key.clone().into_inner();
-    let _ = sqlx::query!("INSERT INTO api_keys (api_key) VALUES (?)", bytes)
+    let _ = sqlx::query!("INSERT INTO api_keys (api_key) VALUES ($1)", bytes)
         .execute(pool)
         .await
         .map(|_| ())?;
@@ -113,7 +113,7 @@ pub enum RevocationStatus {
 pub async fn revoke_api_key(api_key: ApiKey, pool: &DatabasePool) -> Result<RevocationStatus> {
     let bytes = api_key.clone().into_inner();
     Ok(
-        sqlx::query!("DELETE FROM api_keys WHERE api_key == ?", bytes)
+        sqlx::query!("DELETE FROM api_keys WHERE api_key == $1", bytes)
             .execute(pool)
             .await
             .map(|result| match result.rows_affected() {
@@ -141,7 +141,7 @@ pub async fn api_key_is_valid(api_key: ApiKey, pool: &DatabasePool) -> Result<bo
 /// Deletes all expired [`Clips`](`crate::domain::Clip`).
 pub async fn delete_expired(pool: &DatabasePool) -> Result<u64> {
     Ok(
-        sqlx::query!(r#"DELETE FROM clips WHERE strftime('%s', 'now') > expires"#) // todo!() -> change query when migrating to postgres
+        sqlx::query!(r#"DELETE FROM clips WHERE extract(epoch from now()) > extract(epoch from expires)"#)
             .execute(pool)
             .await?
             .rows_affected()
