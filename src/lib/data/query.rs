@@ -141,7 +141,7 @@ pub async fn api_key_is_valid(api_key: ApiKey, pool: &DatabasePool) -> Result<bo
 /// Deletes all expired [`Clips`](`crate::domain::Clip`).
 pub async fn delete_expired(pool: &DatabasePool) -> Result<u64> {
     Ok(
-        sqlx::query!(r#"DELETE FROM clips WHERE strftime('%s', 'now') > expires"#)
+        sqlx::query!(r#"DELETE FROM clips WHERE strftime('%s', 'now') > expires"#) // todo!() -> change query when migrating to postgres
             .execute(pool)
             .await?
             .rows_affected()
