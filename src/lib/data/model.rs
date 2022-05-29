@@ -69,8 +69,8 @@ pub struct NewClip {
     pub(in crate::data) shortcode: String,
     pub(in crate::data) content: String,
     pub(in crate::data) title: Option<String>,
-    pub(in crate::data) posted: i64,
-    pub(in crate::data) expires: Option<i64>,
+    pub(in crate::data) posted: NaiveDateTime,
+    pub(in crate::data) expires: Option<NaiveDateTime>,
     pub(in crate::data) password: Option<String>,
 }
 
@@ -80,10 +80,10 @@ impl From<crate::service::ask::NewClip> for NewClip {
             clip_id: DbId::new().into(),
             content: req.content.into_inner(),
             title: req.title.into_inner(),
-            expires: req.expires.into_inner().map(|time| time.timestamp()),
+            expires: req.expires.into_inner().map(|time|NaiveDateTime::from_timestamp(time.timestamp(), 0)),
             password: req.password.into_inner(),
             shortcode: ShortCode::default().into(),
-            posted: Utc::now().timestamp()
+            posted: Utc::now().naive_utc()
         }
     }
 }
@@ -94,7 +94,7 @@ pub struct UpdateClip {
     pub(in crate::data) shortcode: String,
     pub(in crate::data) content: String,
     pub(in crate::data) title: Option<String>,
-    pub(in crate::data) expires: Option<i64>,
+    pub(in crate::data) expires: Option<NaiveDateTime>,
     pub(in crate::data) password: Option<String>,
 }
 
@@ -103,7 +103,7 @@ impl From<crate::service::ask::UpdateClip> for UpdateClip {
         Self {
             content: req.content.into_inner(),
             title: req.title.into_inner(),
-            expires: req.expires.into_inner().map(|time| time.timestamp()),
+            expires: req.expires.into_inner().map(|time|NaiveDateTime::from_timestamp(time.timestamp(), 0)),
             password: req.password.into_inner(),
             shortcode: ShortCode::default().into(),
         }
