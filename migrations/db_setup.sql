@@ -10,3 +10,8 @@ CREATE TABLE IF NOT EXISTS clips
     password  TEXT,
     hits      BIGINT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS api_keys
+(
+    api_key BLOB PRIMARY KEY
+);
