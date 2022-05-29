@@ -35,3 +35,10 @@ pub struct RocketConfig {
     pub hit_counter: HitCounter,
     pub maintenance: Maintenance
 }
+
+#[cfg(test)]
+pub mod test {
+    pub fn async_runtime() -> tokio::runtime::Runtime {
+        tokio::runtime::Runtime::new().expect("failed to spawn tokio runtime")
+    }
+}
