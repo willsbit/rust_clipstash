@@ -2,7 +2,7 @@ use crate::domain::clip::ClipError;
 use serde::{Serialize, Deserialize};
 use std::str::FromStr;
 use crate::domain::time::Time;
-use rocket::form::{self, DataField, FromFormField, ValueField};
+use rocket::form::{self, FromFormField, ValueField};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Expires(Option<Time>);

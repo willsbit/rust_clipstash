@@ -2,7 +2,6 @@ use crate::data::DbId;
 use crate::{ClipError, ShortCode, Time};
 use chrono::{NaiveDateTime, Utc};
 use std::convert::TryFrom;
-use crate::domain::clip::field;
 
 #[derive(Debug, sqlx::FromRow)]
 pub struct Clip {

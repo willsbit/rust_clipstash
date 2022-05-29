@@ -1,5 +1,4 @@
 use serde::Serialize;
-use std::collections::HashMap;
 use derive_more::Constructor;
 
 pub trait PageContext {

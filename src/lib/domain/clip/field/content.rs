@@ -1,6 +1,6 @@
 use crate::domain::clip::ClipError;
 use serde::{Deserialize, Serialize};
-use rocket::form::{self, DataField, FromFormField, ValueField};
+use rocket::form::{self, FromFormField, ValueField};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Content(String);

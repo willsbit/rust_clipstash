@@ -1,7 +1,7 @@
 use crate::domain::clip::ClipError;
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
-use rocket::form::{self, DataField, FromFormField, ValueField};
+use rocket::form::{self, FromFormField, ValueField};
 
 /// The title field for a [`Clip`](crate::domain::clip::Clip).
 #[derive(Clone, Debug, Deserialize, Serialize)]
