@@ -1,7 +1,6 @@
 pub mod ask;
 pub mod action;
 
-use sqlx::Error;
 use crate::{ClipError, DataError};
 
 #[derive(Debug, thiserror::Error)]

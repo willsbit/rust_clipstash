@@ -8,7 +8,6 @@ use rocket::http::{Cookie, CookieJar, Status};
 use rocket::response::content::RawHtml;
 use rocket::response::{status, Redirect};
 use rocket::{uri, State};
-use crate::web::ctx::Home;
 
 /// Route to the home page.
 #[rocket::get("/")]
@@ -224,7 +223,7 @@ pub mod test {
     #[test]
     fn error_on_missing_clip() {
         let client = client();
-        let response = client.get("/clip/xxxxxxx").dispatch();
+        let response = client.get("/clip/bdbd4b3cb4").dispatch();
         assert_eq!(response.status(), Status::NotFound)
     }
 

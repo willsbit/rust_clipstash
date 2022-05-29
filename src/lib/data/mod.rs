@@ -77,7 +77,6 @@ impl From<DbId> for String {
 pub mod test {
     use crate::data::*;
     use tokio::runtime::Handle;
-    use crate::ServiceError::Data;
 
     pub fn new_db(handle: &Handle) -> AppDatabase {
         use sqlx::migrate::Migrator;

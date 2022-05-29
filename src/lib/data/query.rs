@@ -151,7 +151,6 @@ pub async fn delete_expired(pool: &DatabasePool) -> Result<u64> {
 
 #[cfg(test)]
 pub mod test {
-    use sqlx::encode::IsNull::No;
     use crate::data::test::*;
     use crate::data::*;
     use crate::test::async_runtime;
@@ -182,14 +181,14 @@ pub mod test {
         let pool = db.get_pool();
 
         let clip = rt.block_on(async move {
-            super::new_clip(model_new_clip("a"), &pool.clone()).await
+            super::new_clip(model_new_clip("bdbd4b3cb4"), &pool.clone()).await
         });
 
         assert!(clip.is_ok());
 
         let clip = clip.unwrap();
-        assert_eq!(clip.shortcode, "1");
-        assert_eq!(clip.content, format!("content for clip 'a'"));
+        assert_eq!(clip.shortcode, "bdbd4b3cb4");
+        assert_eq!(clip.content, format!("content for clip 'bdbd4b3cb4'"));
 
     }
 }

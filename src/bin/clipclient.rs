@@ -3,10 +3,7 @@ use clipstash::service::ask::{GetClip, NewClip, UpdateClip};
 use clipstash::web::api::{ApiKey, API_KEY_HEADER};
 use clipstash::Clip;
 use std::error::Error;
-use reqwest::get;
 use structopt::StructOpt;
-use strum::EnumString;
-use crate::Command::{Get, New, Update};
 
 #[derive(StructOpt, Debug)]
 enum Command {

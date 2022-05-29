@@ -3,7 +3,6 @@ use crate::service::ask;
 use crate::{Clip, ShortCode, ServiceError};
 use std::convert::TryInto;
 use crate::web::api::ApiKey;
-use rocket::Data;
 
 pub async fn get_clip(req: ask::GetClip, pool: &DatabasePool) -> Result<Clip, ServiceError> {
     let user_pass = req.password.clone();
