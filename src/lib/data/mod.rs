@@ -84,8 +84,6 @@ pub mod test {
 
         handle.block_on(async move {
             let db = Database::new(":memory:").await;
-            let err = Migrator::new(Path::new("./migrations")).await.unwrap_err();
-            eprintln!("{:?}", err);
             let migrator = Migrator::new(Path::new("./migrations")).await.unwrap();
 
 
