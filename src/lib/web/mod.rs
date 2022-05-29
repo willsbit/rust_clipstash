@@ -41,7 +41,7 @@ pub mod test {
     pub fn config() -> RocketConfig {
         use crate::web::{hitcounter::HitCounter, renderer::Renderer};
         let rt = async_runtime();
-        let renderer = Renderer::new("templates/".into());
+        let renderer = Renderer::new("./templates/".into());
         let database = crate::data::test::new_db(rt.handle());
         let maintenance = crate::domain::maintenance::Maintenance::spawn(database.get_pool().clone(), rt.handle().clone());
         let hit_counter = HitCounter::new(database.get_pool().clone(), rt.handle().clone());

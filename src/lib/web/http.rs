@@ -216,7 +216,7 @@ pub mod test {
     #[test]
     fn gets_home() {
         let client = client();
-        let response = client.get("/").dispatch();
+        let response = client.get("/".trim()).dispatch();
         assert_eq!(response.status(), Status::Ok)
     }
 

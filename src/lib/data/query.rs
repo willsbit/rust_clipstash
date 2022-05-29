@@ -155,12 +155,6 @@ pub mod test {
     use crate::data::*;
     use crate::test::async_runtime;
 
-    fn model_get_clip(shortcode: &str) -> model::GetClip {
-        model::GetClip {
-            shortcode: shortcode.into()
-        }
-    }
-
     fn model_new_clip(shortcode: &str) -> model::NewClip {
         use chrono::Utc;
         model::NewClip {
@@ -180,15 +174,17 @@ pub mod test {
         let db = new_db(rt.handle());
         let pool = db.get_pool();
 
+        let test_shortcode = "bdbd4b3cb4";
+
         let clip = rt.block_on(async move {
-            super::new_clip(model_new_clip("bdbd4b3cb4"), &pool.clone()).await
+            super::new_clip(model_new_clip(test_shortcode), &pool.clone()).await
         });
 
         assert!(clip.is_ok());
-
         let clip = clip.unwrap();
-        assert_eq!(clip.shortcode, "bdbd4b3cb4");
-        assert_eq!(clip.content, format!("content for clip 'bdbd4b3cb4'"));
+
+        assert_eq!(clip.shortcode, test_shortcode);
+        assert_eq!(clip.content, format!("content for clip '{}'", test_shortcode));
 
     }
 }
