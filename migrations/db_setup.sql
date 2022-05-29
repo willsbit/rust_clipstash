@@ -5,13 +5,13 @@ CREATE TABLE IF NOT EXISTS clips
     shortcode TEXT UNIQUE NOT NULL,
     content   TEXT NOT NULL,
     title     TEXT,
-    posted    DATETIME NOT NULL,
-    expires   DATETIME,
+    posted    TIMESTAMP NOT NULL,
+    expires   TIMESTAMP,
     password  TEXT,
     hits      BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS api_keys
 (
-    api_key BLOB PRIMARY KEY
+    api_key BYTEA PRIMARY KEY
 );
