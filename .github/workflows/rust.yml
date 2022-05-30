@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - name: Build Docker image
         env:
           HEROKU_APP: ${{ secrets.HEROKU_APP }}
