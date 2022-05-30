@@ -11,8 +11,9 @@ use rocket::State;
 use serde::Serialize;
 use std::str::FromStr;
 
+
 /// Define API endpoints, error types, catchers and rocket async traits. These routes can
-/// be used with the [`CLI client`](`clipstash::bin::clipclient`).
+/// be used with the `CLI client`.
 /// All API interactions require an API key.
 
 pub const API_KEY_HEADER: &str = "x-api-key";
