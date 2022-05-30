@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build Docker image
+        env:
+          HEROKU_APP: ${{ secrets.HEROKU_APP }}
         run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP }}/web:latest .
 
       - name: Docker image info
@@ -28,4 +30,5 @@ jobs:
       - name: Release
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP: ${{ secrets.HEROKU_APP }}
         run: heroku container:release -a ${{ secrets.HEROKU_APP }} web
