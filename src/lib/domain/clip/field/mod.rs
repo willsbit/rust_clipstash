@@ -1,3 +1,4 @@
+/// All fields of the shortcode are defined and validated in this module.
 mod clip_id;
 pub use clip_id::ClipId;
 

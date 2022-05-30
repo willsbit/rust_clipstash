@@ -4,7 +4,7 @@ use std::time::Duration;
 use tokio::runtime::Handle;
 
 pub struct Maintenance;
-
+/// Creates a struct and implements the spawn method to call the [`delete_expired`](`crate::data::query::delete_expired`) query every 10 seconds
 impl Maintenance {
     pub fn spawn(pool: DatabasePool, handle: Handle) -> Self {
         handle.spawn(async move {

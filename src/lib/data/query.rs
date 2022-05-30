@@ -6,6 +6,7 @@ use crate::web::api::ApiKey;
 
 type Result<T> = std::result::Result<T, DataError>;
 
+/// Updates the database and increases the hits field. A hit is an access to a clip.
 pub async fn increase_hit_count(
     shortcode: &ShortCode,
     hits: u32,
@@ -138,7 +139,7 @@ pub async fn api_key_is_valid(api_key: ApiKey, pool: &DatabasePool) -> Result<bo
     )
 }
 
-/// Deletes all expired [`Clips`](`crate::domain::Clip`).
+/// Deletes all expired [`Clips`](`crate::Clip`).
 pub async fn delete_expired(pool: &DatabasePool) -> Result<u64> {
     Ok(
         sqlx::query!(r#"DELETE FROM clips WHERE extract(epoch from now()) > extract(epoch from expires)"#)
@@ -151,9 +152,11 @@ pub async fn delete_expired(pool: &DatabasePool) -> Result<u64> {
 
 #[cfg(test)]
 pub mod test {
+    use chrono::NaiveDateTime;
     use crate::data::test::*;
     use crate::data::*;
     use crate::test::async_runtime;
+    use crate::Time;
 
     fn model_new_clip(shortcode: &str) -> model::NewClip {
         use chrono::Utc;
@@ -162,7 +165,7 @@ pub mod test {
             content: format!("content for clip '{}'", shortcode),
             title: None,
             shortcode: shortcode.into(),
-            posted: Utc::now().timestamp(),
+            posted: NaiveDateTime::from_timestamp(Utc::now().timestamp(), 0),
             expires: None,
             password: None
         }

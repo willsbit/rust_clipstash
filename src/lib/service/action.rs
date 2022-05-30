@@ -4,6 +4,7 @@ use crate::{Clip, ShortCode, ServiceError};
 use std::convert::TryInto;
 use crate::web::api::ApiKey;
 
+/// This module contains the functions to calls queries that make the database transactions.
 pub async fn get_clip(req: ask::GetClip, pool: &DatabasePool) -> Result<Clip, ServiceError> {
     let user_pass = req.password.clone();
     let clip: Clip = query::get_clip(req, pool).await?.try_into()?;
@@ -34,10 +35,10 @@ pub async fn increase_hit_count(
     Ok(query::increase_hit_count(shortcode, hits, pool).await?)
 }
 
+/// Transactions are started and committed asynchronously in a separate thread.
 pub async fn begin_transaction(pool: &DatabasePool) -> Result<Transaction<'_>, ServiceError> {
     Ok(pool.begin().await?)
 }
-
 
 pub async fn end_transaction(transaction: Transaction<'_>) -> Result<(), ServiceError> {
     Ok(transaction.commit().await?)

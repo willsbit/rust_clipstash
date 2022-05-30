@@ -3,6 +3,7 @@ use derive_more::From;
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
+/// Creates a generic new type to use in time-based fields.
 #[derive(Clone, Debug, From, Deserialize, Serialize)]
 pub struct Time(DateTime<Utc>);
 

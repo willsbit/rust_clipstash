@@ -3,6 +3,7 @@ pub mod action;
 
 use crate::{ClipError, DataError};
 
+/// Implement general error types and the From<T> trait.
 #[derive(Debug, thiserror::Error)]
 pub enum ServiceError {
     #[error("clip error: {0}")]

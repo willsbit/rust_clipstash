@@ -1,6 +1,8 @@
 use serde::Serialize;
 use derive_more::Constructor;
 
+/// Define page contexts to create the webpages using the handlebars templates.
+
 pub trait PageContext {
     fn title(&self) -> &str;
     fn template_path(&self) -> &str;

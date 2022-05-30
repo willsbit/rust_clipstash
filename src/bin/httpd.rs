@@ -8,6 +8,8 @@ use structopt::StructOpt;
 use clipstash::domain::maintenance::Maintenance;
 use clipstash::web::hitcounter::HitCounter;
 
+/// The binary that gets the webserver running.
+
 #[derive(StructOpt, Debug)]
 #[structopt(name = "httpd")]
 struct Opt {

@@ -5,6 +5,11 @@ use clipstash::Clip;
 use std::error::Error;
 use structopt::StructOpt;
 
+/// ClipStash API client, which allows a user to read, write and modify clips from a command
+/// line interface. To use, run [`cargo run --bin clipclient`]. One can also use the API through
+/// requests which do not come from this client, but from other platforms such as Insomnia and
+/// Postman.
+
 #[derive(StructOpt, Debug)]
 enum Command {
     Get {

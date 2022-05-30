@@ -5,6 +5,8 @@ use std::convert::TryFrom;
 
 #[derive(Debug, sqlx::FromRow)]
 pub struct Clip {
+    /// Clip model used in transactions between the service layer
+    /// and the database layer. The Postgres TIMESTAMP type is equivelant to chrono::NaiveDateTime
     pub(in crate::data) clip_id: String,
     pub(in crate::data) shortcode: String,
     pub(in crate::data) content: String,
@@ -65,6 +67,7 @@ impl From<String> for GetClip {
 }
 
 pub struct NewClip {
+
     pub(in crate::data) clip_id: String,
     pub(in crate::data) shortcode: String,
     pub(in crate::data) content: String,

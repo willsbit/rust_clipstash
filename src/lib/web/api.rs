@@ -11,6 +11,10 @@ use rocket::State;
 use serde::Serialize;
 use std::str::FromStr;
 
+/// Define API endpoints, error types, catchers and rocket async traits. These routes can
+/// be used with the [`CLI client`](`clipstash::bin::clipclient`).
+/// All API interactions require an API key.
+
 pub const API_KEY_HEADER: &str = "x-api-key";
 
 #[derive(Responder, Debug, thiserror::Error, Serialize)]
@@ -124,6 +128,7 @@ impl<'r> FromRequest<'r> for ApiKey {
     }
 }
 
+/// Endpoint to generate an API key.
 #[rocket::get("/key")]
 pub async fn new_api_key(database: &State<AppDatabase>) -> Result<Json<&str>, ApiError> {
     let api_key = action::generate_api_key(database.get_pool()).await?;
@@ -131,6 +136,7 @@ pub async fn new_api_key(database: &State<AppDatabase>) -> Result<Json<&str>, Ap
     Ok(Json("API key generated. See logs for details."))
 }
 
+/// Endpoint access a clip, provided you have the shortcode.
 #[rocket::get("/<shortcode>")]
 pub async fn get_clip(
     shortcode: &str,
@@ -157,6 +163,7 @@ pub async fn get_clip(
 }
 
 
+/// Endpoint create a new clip.
 #[rocket::post("/", data = "<req>")]
 pub async fn new_clip(
     req: Json<service::ask::NewClip>,
@@ -168,6 +175,7 @@ pub async fn new_clip(
     Ok(Json(clip))
 }
 
+/// Endpoint modify a clip, provided you have the shortcode.
 #[rocket::put("/", data = "<req>")]
 pub async fn update_clip(
     req: Json<service::ask::UpdateClip>,

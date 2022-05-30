@@ -16,6 +16,7 @@ fn home(renderer: &State<Renderer<'_>>) -> RawHtml<String> {
     RawHtml(renderer.render(context, &[]))
 }
 
+/// Points to an existing clip
 #[rocket::get("/clip/<shortcode>")]
 pub async fn get_clip(
     shortcode: ShortCode,
@@ -46,7 +47,7 @@ pub async fn get_clip(
     }
 }
 
-
+/// Creates a new clip using form data.
 #[rocket::post("/", data = "<form>")]
 pub async fn new_clip(
     form: Form<Contextual<'_, form::NewClip>>,
@@ -98,6 +99,8 @@ pub async fn new_clip(
     }
 }
 
+/// Creates a new password-protected clip using form data and checks if the user has
+/// the password already stored in the browser cookies.
 #[rocket::post("/clip/<shortcode>", data = "<form>")]
 pub async fn submit_clip_password(
     cookies: &CookieJar<'_>,
@@ -138,7 +141,7 @@ pub async fn submit_clip_password(
         )))
     }
 }
-
+/// Shows raw text of a clip.
 #[rocket::get("/clip/raw/<shortcode>")]
 pub async fn get_raw_clip(
     cookies: &CookieJar<'_>,

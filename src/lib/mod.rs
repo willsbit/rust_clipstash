@@ -15,6 +15,7 @@ use rocket::{Build, Rocket};
 use domain::maintenance::Maintenance;
 use crate::web::hitcounter::HitCounter;
 
+/// Build the [`rocket`] and get the webserver up and running in the async runtime.
 pub fn rocket(config: RocketConfig) -> Rocket<Build> {
     rocket::build()
         .manage::<AppDatabase>(config.database)

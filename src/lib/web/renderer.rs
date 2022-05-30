@@ -5,7 +5,8 @@ pub enum RenderError {
     #[error("Rendering error: {0}")]
     RenderError(#[from] handlebars::RenderError)
 }
-
+/// Define the page renderer, which evaluates the current context and displays the
+/// appropriate html.
 pub struct Renderer<'a>(handlebars::Handlebars<'a>);
 
 impl<'a> Renderer<'a> {

@@ -9,6 +9,8 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::runtime::Handle;
 
+/// Defines a type alias for an atomic reference counted pointer, which contains a
+/// mutually exclusive access to a hashmap keyed on the shortcode.
 type HitStore = Arc<Mutex<HashMap<ShortCode, u32>>>;
 
 #[derive(Debug, thiserror::Error)]
@@ -25,6 +27,7 @@ enum HitCountMsg {
 }
 
 pub struct HitCounter {
+    /// Struct with a crossbeam sender to communicate between threads.
     tx: Sender<HitCountMsg>
 }
 
@@ -78,7 +81,9 @@ impl HitCounter {
         let rx_clone = rx.clone();
 
         let _ = std::thread::spawn(move || {
-            println!("HitCounter thread stored");
+            /// The hitcounter transactions occur in a separate thread and use
+            /// Arc and Mutex to make sure they're consistent.
+            dbg!("HitCounter thread stored");
             let store: HitStore = Arc::new(Mutex::new(HashMap::new()));
 
         loop {

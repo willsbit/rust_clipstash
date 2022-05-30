@@ -10,6 +10,7 @@ pub enum DataError {
     Database(#[from] sqlx::Error),
 }
 
+/// Define general-use types for database access.
 pub type AppDatabase = Database<Postgres>;
 pub type DatabasePool = sqlx::postgres::PgPool;
 pub type Transaction<'t> = sqlx::Transaction<'t, Postgres>;
@@ -22,6 +23,7 @@ pub mod query;
 
 impl Database<Postgres> {
     pub async fn new(connection_str: &str) -> Self {
+        /// Establishes a connection with the database.
         let pool = sqlx::postgres::PgPoolOptions::new()
             .connect(connection_str)
             .await;
@@ -42,6 +44,7 @@ impl Database<Postgres> {
 }
 
 #[derive(Clone, Debug, From, Display, Deserialize, Serialize)]
+/// Struct to generate the unique identifiers of the clips.
 pub struct DbId(Uuid);
 
 impl DbId {
