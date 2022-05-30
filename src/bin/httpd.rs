@@ -6,11 +6,15 @@ use rocket::tokio;
 use structopt::StructOpt;
 use clipstash::domain::maintenance::Maintenance;
 use clipstash::web::hitcounter::HitCounter;
+use clipstash::data::secret;
+use clipstash::data::secret::DATABASE_URL;
+
+const DB_URL: &str = DATABASE_URL;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "httpd")]
 struct Opt {
-    #[structopt(default_value = "sqlite:data.db")]
+    #[structopt(default_value = DB_URL)]
     connection_string: String,
     #[structopt(short, long, parse(from_os_str), default_value = "templates/")]
     template_directory: PathBuf

@@ -19,6 +19,7 @@ pub type AppQueryResult = sqlx::postgres::PgQueryResult;
 pub struct Database<D: sqlx::Database>(sqlx::Pool<D>);
 pub mod model;
 pub mod query;
+pub mod secret;
 
 impl Database<Postgres> {
     pub async fn new(connection_str: &str) -> Self {
