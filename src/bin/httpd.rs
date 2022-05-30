@@ -1,3 +1,4 @@
+use std::env::VarError;
 use clipstash::data::AppDatabase;
 use clipstash::web::{renderer::Renderer};
 use dotenv::dotenv;
@@ -7,14 +8,11 @@ use structopt::StructOpt;
 use clipstash::domain::maintenance::Maintenance;
 use clipstash::web::hitcounter::HitCounter;
 use clipstash::data::secret;
-use clipstash::data::secret::DATABASE_URL;
-
-const DB_URL: &str = DATABASE_URL;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "httpd")]
 struct Opt {
-    #[structopt(default_value = DB_URL)]
+    #[structopt(default_value = "localhost:5432")]
     connection_string: String,
     #[structopt(short, long, parse(from_os_str), default_value = "templates/")]
     template_directory: PathBuf
@@ -22,7 +20,15 @@ struct Opt {
 
 fn main() {
     dotenv().ok();
-    let opt = Opt::from_args();
+
+    let DB_URL = std::env::var("DATABASE_URL")
+        .ok()
+        .unwrap_or("localhost:5432".to_owned());
+
+    let opt = Opt {
+        connection_string: DB_URL,
+        template_directory: PathBuf::from("templates/")
+    };
 
     let rt = tokio::runtime::Runtime::new()
         .expect("failed to spawn tokio runtime");
