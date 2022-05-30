@@ -2,7 +2,7 @@
 FROM rust:1.60 as build
 
 RUN USER=root cargo new --bin rust_clipstash
-WORKDIR /holy
+WORKDIR /rust_clipstash
 
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
