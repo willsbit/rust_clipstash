@@ -7,7 +7,6 @@ use rocket::tokio;
 use structopt::StructOpt;
 use clipstash::domain::maintenance::Maintenance;
 use clipstash::web::hitcounter::HitCounter;
-use clipstash::data::secret;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "httpd")]

@@ -3,4 +3,3 @@ Cargo.lock
 /data.db-shm
 /data.db-wal
 .env
-/src/lib/data/secret.rs
